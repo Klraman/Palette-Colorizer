@@ -712,6 +712,47 @@ class PALETTE_OT_apply_materials(Operator):
         return {'FINISHED'}
 
 
+class PALETTE_OT_clear_materials(Operator):
+    bl_idname = "palette.clear_materials"
+    bl_label = "Clear Materials"
+    bl_description = "Remove temporary palette materials from target objects"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    only_palette: BoolProperty(
+        name="Only Palette Materials",
+        description="Only remove materials created by Palette Colorizer (PC_*)",
+        default=True,
+    )
+
+    def execute(self, context):
+        settings = context.scene.palette_colorizer
+        objects = get_target_objects(settings, context)
+        if not objects:
+            self.report({'WARNING'}, "No valid mesh objects found.")
+            return {'CANCELLED'}
+
+        removed_count = 0
+        palette_mats = set()
+        for obj in objects:
+            if not obj.data or not hasattr(obj.data, "materials"):
+                continue
+            for i in reversed(range(len(obj.data.materials))):
+                mat = obj.data.materials[i]
+                if mat:
+                    if self.only_palette and not mat.name.startswith("PC_"):
+                        continue
+                    palette_mats.add(mat)
+                    obj.data.materials.pop(index=i)
+                    removed_count += 1
+
+        for mat in palette_mats:
+            if mat.users == 0:
+                bpy.data.materials.remove(mat)
+
+        self.report({'INFO'}, f"Removed {removed_count} material slot(s) across {len(objects)} object(s).")
+        return {'FINISHED'}
+
+
 # ===========================================================================
 # Custom palette edit operators
 # ===========================================================================
@@ -1035,7 +1076,8 @@ class PALETTE_PT_main(Panel):
 
         row = layout.row(align=True)
         row.scale_y = 1.2
-        row.operator("palette.apply_materials", icon='MATERIAL', text="Apply Materials (Cycles / EEVEE)")
+        row.operator("palette.apply_materials", icon='MATERIAL', text="Apply Materials")
+        row.operator("palette.clear_materials", icon='TRASH', text="Clear Materials")
 
 
 class PALETTE_PT_share(Panel):
@@ -1110,6 +1152,7 @@ classes = (
     PALETTE_OT_apply_colors,
     PALETTE_OT_reset_colors,
     PALETTE_OT_apply_materials,
+    PALETTE_OT_clear_materials,
     PALETTE_OT_add_custom_color,
     PALETTE_OT_remove_custom_color,
     PALETTE_OT_randomize_custom,

@@ -1,6 +1,14 @@
 # Palette Colorizer for Blender
 
-Palette Colorizer assigns harmonious color palettes to objects in Blender. It supports Blender 4.2 and Blender 5.2.
+Stop presenting flat gray models. Palette Colorizer gives your work-in-progress models, scene blockouts, and concept assets clean, harmonious colors directly in Blender. It supports Blender 4.2 and Blender 5.2.
+
+## Why Use Palette Colorizer for Work-in-Progress Assets
+
+Presenting 3D assets in default gray shading hides silhouette detail and visual hierarchy. Palette Colorizer solves this problem:
+
+- Clear Visual Hierarchy: Distinct color palettes separate scene elements, component kits, and assemblies at a glance.
+- Client and Team Presentations: Deliver appealing work-in-progress viewport captures and turntable renders without complex production shaders.
+- Fast Production Handover: Finish your modeling phase and start final shading. One click removes all temporary palette materials from your objects.
 
 ## How It Functions
 
@@ -12,8 +20,9 @@ Palette Colorizer changes how you color scene objects:
    - Sequential: Assigns colors in palette sequence.
    - Random: Assigns colors from the palette with a seed value.
    - By Name: Uses an object name hash to assign a stable color.
-4. The add-on can create a Principled BSDF material for each object. This connects the palette color to the Base Color input for Cycles and EEVEE renders.
-5. The add-on encodes palettes into compact JSON strings. You can copy these strings to your clipboard or save palettes to your local library.
+4. The add-on can create Principled BSDF materials with Base Color inputs for Cycles and EEVEE renders.
+5. The Clear Materials operator safely removes temporary palette materials and purges unused shaders from your file.
+6. The add-on encodes palettes into compact JSON strings. You can copy these strings to your clipboard or save palettes to your local library.
 
 ## Why Use Palette Colorizer Over Blender Random Color
 
@@ -21,6 +30,7 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 
 - Controlled Color Harmony: Blender random color produces chaotic, clashing hues. Palette Colorizer constrains objects to curated palettes with balanced saturation and values.
 - Direct Render Output: Blender random color works only in solid viewport display. It does not appear in Cycles or EEVEE renders without manual shader node networks. Palette Colorizer creates real materials in one click.
+- Clean Material Removal: Blender provides no dedicated tool to clear temporary showcase shaders. Palette Colorizer identifies its own materials and clears them when you are ready for final texturing.
 - Repeatable Seeds: Blender random color provides no seed control. Palette Colorizer includes an unbiased seed generator from 1 through 9999 to reproduce exact assignments.
 - Theme Integration: Palette Colorizer extracts colors from your active Blender interface theme for consistent presentations.
 - Team Collaboration: You cannot share Blender random color assignments. Palette Colorizer lets you copy a palette string to Discord or export JSON files to your team.
@@ -33,6 +43,7 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 - Unbiased random seed generator from 1 through 9999.
 - Automatic viewport shading switch to Object color mode.
 - One-click material creation for Cycles and EEVEE engines.
+- Dedicated material cleanup tool to remove temporary showcase shaders.
 - Compact JSON string copy and paste for quick sharing.
 - Persistent palette library stored in add-on preferences.
 
