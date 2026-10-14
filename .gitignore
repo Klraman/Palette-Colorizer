@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Intermediate render frames and temporary files
+assets/frames/
+assets/palettes_temp.json
+
+# Build packages (distribute via releases or Gumroad)
+*.zip

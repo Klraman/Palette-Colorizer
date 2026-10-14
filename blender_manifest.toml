@@ -1,0 +1,41 @@
+schema_version = "1.0.0"
+
+id            = "palette_colorizer"
+name          = "Palette Colorizer"
+version       = "5.2.0"
+tagline       = "Apply named color palettes to object viewport colors"
+maintainer    = "Klra Man"
+type          = "add-on"
+
+blender_version_min = "4.2.0"
+
+license = [
+    "SPDX:GPL-3.0-or-later",
+]
+
+copyright = [
+    "2026 Klra",
+]
+
+tags = ["3D View", "Material"]
+
+# Permissions: Declare each resource category that the addon accesses.
+# Each value is a short description without trailing punctuation.
+[permissions]
+clipboard = "Copy and paste palette share strings between users"
+files     = "Export and import palette JSON files to and from disk"
+
+# Build: Exclude files that must not ship in the final zip archive.
+[build]
+paths_exclude_pattern = [
+    "__pycache__/",
+    ".git*",
+    "*.zip",
+    "*.pyc",
+    ".DS_Store",
+    "assets/",
+    "generate_gumroad_assets.py",
+    "click_*.py",
+    "test_*.py",
+    "upload_*.py",
+]
