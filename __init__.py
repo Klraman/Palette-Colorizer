@@ -1247,8 +1247,14 @@ def register():
 
 def unregister():
     for cls in reversed(classes):
-        bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.palette_colorizer
+        if hasattr(cls, "bl_rna"):
+            try:
+                bpy.utils.unregister_class(cls)
+            except RuntimeError:
+                pass
+    if hasattr(bpy.types.Scene, "palette_colorizer"):
+        del bpy.types.Scene.palette_colorizer
+
 
     for panel in (PALETTE_PT_main, PALETTE_PT_share):
         if hasattr(panel, "bl_icon_value"):
