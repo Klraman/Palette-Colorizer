@@ -11,6 +11,8 @@ desktop.ini
 # Intermediate render frames and temporary files
 assets/frames/
 assets/palettes_temp.json
+Astra Assets/
 
 # Build packages (distribute via releases or Gumroad)
 *.zip
+

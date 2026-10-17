@@ -24,9 +24,11 @@ bl_info = {
 }
 
 import bpy
+import os
 import json
 import random
 import colorsys
+import bpy.utils.previews
 from bpy.props import (
     StringProperty, FloatVectorProperty, IntProperty,
     EnumProperty, BoolProperty, CollectionProperty
@@ -1169,9 +1171,75 @@ classes = (
 )
 
 
+# ===========================================================================
+# Custom icons management (for compact mode sidebar tabs)
+# ===========================================================================
+
+_preview_collections = {}
+
+
+def load_custom_icons():
+    global _preview_collections
+    if "main" in _preview_collections:
+        return _preview_collections["main"]
+
+    pcoll = bpy.utils.previews.new()
+
+    candidates = [
+        os.path.join(os.path.dirname(__file__), "icons", "thumbnail.png"),
+        r"C:\Users\My Computer\Documents\Palette Colorizer\Astra Assets\previews\01-thumbnail.png",
+        os.path.join(os.path.dirname(__file__), "Astra Assets", "previews", "01-thumbnail.png"),
+    ]
+
+    icon_path = None
+    for p in candidates:
+        if os.path.exists(p):
+            icon_path = p
+            break
+
+    if icon_path:
+        try:
+            thumb = pcoll.load("thumbnail", icon_path, 'IMAGE')
+            _ = thumb.icon_pixels[0]
+        except Exception:
+            pass
+
+    _preview_collections["main"] = pcoll
+    return pcoll
+
+
+def unload_custom_icons():
+    global _preview_collections
+    for pcoll in _preview_collections.values():
+        try:
+            bpy.utils.previews.remove(pcoll)
+        except Exception:
+            pass
+    _preview_collections.clear()
+
+
+def update_panel_icons(icon_id):
+    for panel in (PALETTE_PT_main, PALETTE_PT_share):
+        if icon_id:
+            panel.bl_icon_value = icon_id
+
+
 def register():
+    # Load custom thumbnail icon for compact mode sidebar tab
+    pcoll = load_custom_icons()
+    thumb = pcoll.get("thumbnail") if pcoll else None
+    icon_id = thumb.icon_id if thumb else 0
+
+    if icon_id:
+        update_panel_icons(icon_id)
+
     for cls in classes:
         bpy.utils.register_class(cls)
+
+    # In Blender 5.2+, re-apply to ensure registered panel RNA has the icon
+    if icon_id and bpy.app.version >= (5, 2, 0):
+        update_panel_icons(icon_id)
+
     bpy.types.Scene.palette_colorizer = bpy.props.PointerProperty(
         type=PaletteColorizerSettings
     )
@@ -1182,6 +1250,12 @@ def unregister():
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.palette_colorizer
 
+    for panel in (PALETTE_PT_main, PALETTE_PT_share):
+        if hasattr(panel, "bl_icon_value"):
+            panel.bl_icon_value = 0
+
+    unload_custom_icons()
+
 
 if __name__ == "__main__":
-    register()
+    register()
