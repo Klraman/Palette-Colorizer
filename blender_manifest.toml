@@ -1,13 +1,13 @@
 schema_version = "1.0.0"
 
-id            = "palette_colorizer"
-name          = "Palette Colorizer"
-version       = "5.2.0"
-tagline       = "Apply named color palettes to object viewport colors"
-maintainer    = "Klra Man"
-type          = "add-on"
+id = "palette_colorizer"
+name = "Palette Colorizer"
+version = "1.1.0"
+tagline = "Assign curated color palettes to viewport objects and showcase materials"
+maintainer = "Klra"
+type = "add-on"
 
-blender_version_min = "4.2.0"
+blender_version_min = "5.0.0"
 
 license = [
     "SPDX:GPL-3.0-or-later",
@@ -19,11 +19,11 @@ copyright = [
 
 tags = ["3D View", "Material"]
 
-# Permissions: Declare each resource category that the addon accesses.
+# Permissions: Declare each resource category that the add-on accesses.
 # Each value is a short description without trailing punctuation.
 [permissions]
 clipboard = "Copy and paste palette share strings between users"
-files     = "Export and import palette JSON files to and from disk"
+files = "Export and import palette JSON files and install add-on updates"
 
 # Build: Exclude files that must not ship in the final zip archive.
 [build]
@@ -33,11 +33,12 @@ paths_exclude_pattern = [
     "*.zip",
     "*.pyc",
     ".DS_Store",
+    "*.md",
     "assets/",
     "Astra Assets/",
     "generate_gumroad_assets.py",
     "click_*.py",
     "test_*.py",
     "upload_*.py",
+    "_update/",
 ]
-

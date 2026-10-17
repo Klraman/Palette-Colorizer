@@ -1,0 +1,46 @@
+# Palette Colorizer 1.1 Update Notes
+
+## Gumroad Update Post (Detailed)
+
+### Palette Colorizer 1.1: Live Updates, Smart Grouping, Non-Destructive Material Slots, and Built-In Updater
+
+This update overhauls the user interface, material architecture, and color assignment engine for Blender 5.0 and 5.2.
+
+#### New Features
+
+- Live Viewport Updates: Switching palettes, scrubbing the seed slider, or changing distribution modes now updates object colors immediately in the viewport.
+- Interactive Swatch Preview Strip: Preview all colors of any built-in, theme, saved, or custom palette directly below the palette selector. Click any swatch to edit it and automatically fork the preset into Custom mode.
+- Target Grouping Modes: Color your scene Per Object, Per Collection, Per Root Parent hierarchy, or Per Loose Mesh Island.
+- Object Color Pinning: Lock colors on selected objects with Pin Selected so seed re-rolls only change the remaining unlocked objects.
+- Adjacent Color Contrast: In Random mode, a spatial proximity check prevents touching neighbor objects from receiving identical swatch colors.
+- Image Palette Sampler: Sample 8 dominant colors from any loaded Blender reference image directly into your Custom palette.
+- Built-In Preferences Updater: Install future updates directly from Edit > Preferences > Add-ons > Palette Colorizer. The updater automatically scans your Home and Downloads folders for new zip archives.
+
+#### Material and Surface Improvements
+
+- Non-Destructive Material Slots: Assigning showcase materials to meshes that already have materials now appends a temporary palette material slot instead of overwriting Slot 0. Clicking Clear Materials removes the temporary slot and restores your original per-face material assignments automatically.
+- Single Shared Master Material: Instead of creating one material per object, the default Shared Master mode uses a single Principled BSDF material driven by an Object Info node across the entire scene.
+- Per-Swatch and Color Attribute Modes: Switch between a single master material, one material per palette swatch, or a mesh Color Attribute (PC_Color) workflow.
+- Live Surface Sliders: Control Roughness, Metallic, and Specular values in real time across all showcase materials for matte clay, glossy plastic, or metallic blockout renders.
+- Protect Existing Materials Toggle: Optional toggle to skip objects that already have non-palette materials assigned.
+- Non-Mesh Object Support: Color Curve, Surface, Meta, and Text objects alongside standard Meshes.
+
+#### User Interface Redesign
+
+- Categorized Palette Menu: All 30 built-in palettes, Theme palette, and Saved Library palettes are now organized under clear category headers.
+- Segmented Controls: Replaced nested boxes and redundant buttons with horizontal segmented toggles and collapsible sub-panels matching Blender 5.x design standards.
+
+---
+
+## Twitter / X Update Post (Compact)
+
+Palette Colorizer 1.1 for Blender 5.0+ is out now!
+
+What is new:
+- Live viewport updates as you scrub palettes & seeds
+- Non-destructive material slots (keeps & restores your original materials)
+- Group by Object, Collection, Parent, or Mesh Island
+- Pin/lock object colors & Adjacent Contrast check
+- 1 Shared Master Material + live Roughness/Metallic sliders
+- Sample palettes from reference images
+- Built-in Preferences updater
