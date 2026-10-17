@@ -136,10 +136,11 @@ for i, obj in enumerate(objects):
     materials.append(mat)
 
 # Load palette dict from JSON passed via env or file
-output_dir = r"C:\Users\My Computer\Documents\Palette Colorizer\assets\renders"
+assets_dir = os.path.dirname(os.path.abspath(__file__))
+output_dir = os.path.join(assets_dir, "renders")
 os.makedirs(output_dir, exist_ok=True)
 
-with open(r"C:\Users\My Computer\Documents\Palette Colorizer\assets\palettes_temp.json", "r") as f:
+with open(os.path.join(assets_dir, "palettes_temp.json"), "r") as f:
     palettes_data = json.load(f)
 
 # Render 16:9 shots

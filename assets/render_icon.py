@@ -128,7 +128,7 @@ scene.render.resolution_x = 1200
 scene.render.resolution_y = 1200
 scene.render.image_settings.file_format = 'PNG'
 
-output_path = r"C:\Users\My Computer\Documents\Palette Colorizer\assets\thumbnail.png"
+output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thumbnail.png")
 scene.render.filepath = output_path
 bpy.ops.render.render(write_still=True)
 print("Rendered refined 3D icon thumbnail to:", output_path)

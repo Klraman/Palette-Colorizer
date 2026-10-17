@@ -1187,7 +1187,6 @@ def load_custom_icons():
 
     candidates = [
         os.path.join(os.path.dirname(__file__), "icons", "thumbnail.png"),
-        r"C:\Users\My Computer\Documents\Palette Colorizer\Astra Assets\previews\01-thumbnail.png",
         os.path.join(os.path.dirname(__file__), "Astra Assets", "previews", "01-thumbnail.png"),
     ]
 

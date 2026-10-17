@@ -9,7 +9,7 @@ import subprocess
 import json
 from PIL import Image, ImageDraw, ImageFont
 
-ASSETS_DIR = r"C:\Users\My Computer\Documents\Palette Colorizer\assets"
+ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
 BLENDER_EXE = r"C:\Program Files (x86)\Steam\steamapps\common\Blender\blender.exe"
