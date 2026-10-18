@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Scene and item PropertyGroup definitions with live update callbacks and native swatch getters.
 """

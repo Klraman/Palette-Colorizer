@@ -57,14 +57,13 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 - Live Roughness, Metallic, and Specular surface sliders.
 - Protect Existing Materials toggle and one-click Clear Palette Materials cleanup.
 - Compact JSON string copy and paste for quick sharing on Discord or chat.
-- Persistent palette library and built-in zip update installer in Add-on Preferences.
+- Persistent palette library in Add-on Preferences.
 
-## How to Install or Update
+## How to Install
 
 1. Download the palette_colorizer.zip file.
 2. Open Blender 5.0 or newer (including Blender 5.2).
 3. Open Edit and select Preferences.
-4. Select the Add-ons section.
+4. Select Get Extensions or Add-ons.
 5. Click the top-right arrow icon and select Install from Disk.
 6. Select the palette_colorizer.zip file and click Install from Disk.
-7. For future updates, open the Palette Colorizer Preferences panel, expand Install Palette Colorizer Update, and select the new zip archive from your Downloads folder.

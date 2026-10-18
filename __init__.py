@@ -1,32 +1,23 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Palette Colorizer for Blender 5.0+.
-Assign curated color palettes to viewport objects and showcase materials.
+Assign color palettes to viewport objects and showcase shaders.
 
 Features:
-  - 30 categorized built-in palettes plus active Blender theme palette.
-  - Live viewport updates and interactive color swatch preview strip.
-  - Group colors per object, collection, root parent hierarchy, or mesh island.
-  - Adjacent contrast graph coloring and object color pinning.
-  - Single shared Object Info showcase material, per-swatch materials, or mesh color attributes.
-  - Live Roughness, Metallic, and Specular material sliders.
-  - Dominant color palette extraction from reference images.
-  - Built-in add-on update installer in Preferences.
+- 30 categorized built-in palettes plus active Blender theme palette.
+- Live viewport updates and interactive color swatch preview strip.
+- Group colors per object, collection, root parent hierarchy, or mesh island.
+- Adjacent contrast graph coloring and object color pinning.
+- Single shared Object Info showcase material, per-swatch materials, or mesh color attributes.
+- Live Roughness, Metallic, and Specular material sliders.
+- Dominant color palette extraction from reference images.
 """
-
-bl_info = {
-    "name": "Palette Colorizer",
-    "author": "Klra",
-    "version": (1, 1, 0),
-    "blender": (5, 0, 0),
-    "location": "View3D > Sidebar > Palette",
-    "description": "Assign curated color palettes to viewport objects and showcase materials",
-    "category": "3D View",
-}
 
 def reload_modules():
     import importlib
     import bpy
-    from . import palettes, updater, operators, properties, preferences, ui
+    from . import palettes, operators, properties, preferences, ui
 
     if hasattr(bpy.types.Scene, "palette_colorizer"):
         try:
@@ -34,7 +25,7 @@ def reload_modules():
         except Exception:
             pass
 
-    for mod in (ui, updater, operators, properties, preferences):
+    for mod in (ui, operators, properties, preferences):
         for attr_name in dir(mod):
             obj = getattr(mod, attr_name, None)
             if isinstance(obj, type) and hasattr(obj, "bl_rna"):
@@ -43,7 +34,7 @@ def reload_modules():
                 except Exception:
                     pass
 
-    for mod in (palettes, updater, operators, properties, preferences, ui):
+    for mod in (palettes, operators, properties, preferences, ui):
         importlib.reload(mod)
 
 if "bpy" in locals():
@@ -51,7 +42,6 @@ if "bpy" in locals():
 
 import bpy
 from . import palettes
-from . import updater
 from . import operators
 from . import properties
 from . import preferences
@@ -85,10 +75,6 @@ classes = (
     operators.PALETTE_OT_library_load,
     operators.PALETTE_OT_library_remove,
     operators.PALETTE_OT_open_preferences,
-    updater.PALETTE_OT_remove_update,
-    updater.PALETTE_OT_use_update,
-    updater.PALETTE_OT_rescan_updates,
-    updater.PALETTE_OT_install_update_now,
     ui.PALETTE_PT_main,
     ui.PALETTE_PT_materials,
     ui.PALETTE_PT_options,
@@ -131,8 +117,6 @@ def register():
         type=properties.PaletteColorizerSettings
     )
 
-    updater.verify_update()
-
 def unregister():
     if hasattr(bpy.types.Scene, "palette_colorizer"):
         del bpy.types.Scene.palette_colorizer
@@ -144,7 +128,6 @@ def unregister():
         ui.PALETTE_PT_main.bl_icon_value = 0
 
     ui.unload_custom_icons()
-    updater.install_update()
 
 if __name__ == "__main__":
     register()

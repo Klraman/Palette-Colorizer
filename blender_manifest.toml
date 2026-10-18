@@ -1,11 +1,12 @@
 schema_version = "1.0.0"
 
 id = "palette_colorizer"
+version = "1.1.1"
 name = "Palette Colorizer"
-version = "1.1.0"
-tagline = "Assign curated color palettes to viewport objects and showcase materials"
+tagline = "Assign color palettes to viewport objects and showcase shaders"
 maintainer = "Klra"
 type = "add-on"
+website = "https://github.com/Klraman/Palette-Colorizer"
 
 blender_version_min = "5.0.0"
 
@@ -20,10 +21,10 @@ copyright = [
 tags = ["3D View", "Material"]
 
 # Permissions: Declare each resource category that the add-on accesses.
-# Each value is a short description without trailing punctuation.
+# Each value is a short description up to 64 characters without trailing punctuation.
 [permissions]
 clipboard = "Copy and paste palette share strings between users"
-files = "Export and import palette JSON files and install add-on updates"
+files = "Export and import palette JSON files to and from disk"
 
 # Build: Exclude files that must not ship in the final zip archive.
 [build]

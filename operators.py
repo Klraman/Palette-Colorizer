@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Operators and scene execution logic for Palette Colorizer.
 """
@@ -13,7 +15,6 @@ from bpy.types import Operator
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 
 from .palettes import (
-    get_addon_id,
     get_active_palette_colors,
     palette_to_dict,
     dict_to_palette,
@@ -787,8 +788,7 @@ class PALETTE_OT_library_save(Operator):
         else:
             name = settings.palette_name.replace("SAVED::", "")
         data_str = json.dumps(palette_to_dict(name, colors))
-        addon_id = get_addon_id()
-        prefs = context.preferences.addons[addon_id].preferences
+        prefs = context.preferences.addons[__package__].preferences
         for entry in prefs.saved_palettes:
             if entry.name == name:
                 entry.json_data = data_str
@@ -811,8 +811,7 @@ class PALETTE_OT_library_load(Operator):
 
     def execute(self, context):
         settings = context.scene.palette_colorizer
-        addon_id = get_addon_id()
-        prefs = context.preferences.addons[addon_id].preferences
+        prefs = context.preferences.addons[__package__].preferences
         if not prefs.saved_palettes or not (0 <= self.index < len(prefs.saved_palettes)):
             self.report({'WARNING'}, "Invalid library index.")
             return {'CANCELLED'}
@@ -834,8 +833,7 @@ class PALETTE_OT_library_remove(Operator):
     bl_description = "Remove the selected palette from the library"
 
     def execute(self, context):
-        addon_id = get_addon_id()
-        prefs = context.preferences.addons[addon_id].preferences
+        prefs = context.preferences.addons[__package__].preferences
         idx = prefs.saved_palette_index
         if 0 <= idx < len(prefs.saved_palettes):
             name = prefs.saved_palettes[idx].name
@@ -847,12 +845,11 @@ class PALETTE_OT_library_remove(Operator):
 class PALETTE_OT_open_preferences(Operator):
     bl_idname = "palette.open_preferences"
     bl_label = "Open Add-on Preferences"
-    bl_description = "Open Palette Colorizer preferences and update manager"
+    bl_description = "Open Palette Colorizer preferences and saved palette library"
 
     def execute(self, context):
-        addon_id = get_addon_id()
         try:
-            bpy.ops.preferences.addon_show(module=addon_id)
+            bpy.ops.preferences.addon_show(module=__package__)
         except Exception:
             bpy.ops.screen.userpref_show("INVOKE_DEFAULT")
         return {'FINISHED'}

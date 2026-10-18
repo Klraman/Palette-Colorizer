@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 User interface panels, UILists, custom sidebar tab icons, and native color swatch strip.
 """
@@ -7,7 +9,7 @@ import bpy
 import bpy.utils.previews
 from bpy.types import Panel, UIList
 
-from .palettes import get_addon_id, get_active_palette_colors
+from .palettes import get_active_palette_colors
 from .operators import get_target_objects
 
 _preview_collections = {}
@@ -19,19 +21,13 @@ def load_custom_icons():
         return _preview_collections["main"]
 
     pcoll = bpy.utils.previews.new()
-    candidates = [
-        os.path.join(os.path.dirname(__file__), "icons", "thumbnail.png"),
-        os.path.join(os.path.dirname(__file__), "Astra Assets", "previews", "01-thumbnail.png"),
-    ]
-
-    for p in candidates:
-        if os.path.exists(p):
-            try:
-                thumb = pcoll.load("thumbnail", p, 'IMAGE')
-                _ = thumb.icon_pixels[0]
-            except Exception:
-                pass
-            break
+    icon_path = os.path.join(os.path.dirname(__file__), "icons", "thumbnail.png")
+    if os.path.exists(icon_path):
+        try:
+            thumb = pcoll.load("thumbnail", icon_path, 'IMAGE')
+            _ = thumb.icon_pixels[0]
+        except Exception:
+            pass
 
     _preview_collections["main"] = pcoll
     return pcoll
@@ -114,18 +110,14 @@ class PALETTE_PT_main(Panel):
 
     def draw_header_preset(self, context):
         layout = self.layout
-        addon_id = get_addon_id()
         show_btn = True
-        has_update = False
         try:
-            prefs = context.preferences.addons[addon_id].preferences
+            prefs = context.preferences.addons[__package__].preferences
             show_btn = prefs.show_sidebar_prefs_button
-            has_update = bool(prefs.update_msg)
         except Exception:
             pass
         if show_btn:
-            icon = 'FILE_REFRESH' if has_update else 'PREFERENCES'
-            layout.operator("palette.open_preferences", text="", icon=icon, emboss=False)
+            layout.operator("palette.open_preferences", text="", icon='PREFERENCES', emboss=False)
 
     def draw(self, context):
         layout = self.layout
@@ -278,7 +270,6 @@ class PALETTE_PT_share(Panel):
     def draw(self, context):
         layout = self.layout
         settings = context.scene.palette_colorizer
-        addon_id = get_addon_id()
 
         box = layout.box()
         box.label(text="Share String (Discord / Chat)", icon='COPYDOWN')
@@ -296,7 +287,7 @@ class PALETTE_PT_share(Panel):
         box = layout.box()
         box.label(text="My Library", icon='BOOKMARKS')
         try:
-            prefs = context.preferences.addons[addon_id].preferences
+            prefs = context.preferences.addons[__package__].preferences
             if prefs.saved_palettes:
                 row = box.row()
                 row.template_list(

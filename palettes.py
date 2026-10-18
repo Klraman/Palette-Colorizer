@@ -1,13 +1,11 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Palette data, category definitions, theme color extraction, and image color sampling.
 """
 
 import json
 import colorsys
-
-def get_addon_id():
-    """Return the root package name for add-on preferences lookup."""
-    return __package__ if __package__ else __name__.split(".")[0]
 
 # ===========================================================================
 # Built-in palettes (linear RGB, alpha=1.0)
@@ -465,10 +463,9 @@ def get_palette_items(self, context):
     items.append(("THEME", "Current Theme", "Extract colors from the active Blender theme"))
     items.append(("CUSTOM", "Custom Palette", "Use the editable custom palette slots"))
 
-    addon_id = get_addon_id()
     try:
-        if context and addon_id in context.preferences.addons:
-            prefs = context.preferences.addons[addon_id].preferences
+        if context and __package__ in context.preferences.addons:
+            prefs = context.preferences.addons[__package__].preferences
             if prefs and prefs.saved_palettes:
                 items.append(("", "Saved Library", ""))
                 for entry in prefs.saved_palettes:
@@ -489,9 +486,8 @@ def get_active_palette_colors(settings, context=None):
         return get_theme_palette_colors(context)
     if name.startswith("SAVED::") and context:
         saved_name = name[7:]
-        addon_id = get_addon_id()
         try:
-            prefs = context.preferences.addons[addon_id].preferences
+            prefs = context.preferences.addons[__package__].preferences
             for entry in prefs.saved_palettes:
                 if entry.name == saved_name:
                     _, colors = dict_to_palette(json.loads(entry.json_data))
