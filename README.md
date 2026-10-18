@@ -56,7 +56,7 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 - Single Shared Master material, Per-Swatch materials, and Mesh Color Attribute modes.
 - Live Roughness, Metallic, and Specular surface sliders.
 - Protect Existing Materials toggle and one-click Clear Palette Materials cleanup.
-- Compact JSON string copy and paste for quick sharing on Discord or chat.
+- Compact JSON string copy and paste for quick palette sharing.
 - Persistent palette library in Add-on Preferences.
 
 ## How to Install

@@ -1,7 +1,5 @@
 # Palette Colorizer 1.1.1 Update Notes
 
-## Gumroad Update Post (Detailed)
-
 ### Palette Colorizer 1.1.1: Live Updates, Smart Grouping, Non-Destructive Material Slots, and Blender Extensions Compliance
 
 This update overhauls the user interface, material architecture, and color assignment engine for Blender 5.0 and 5.2, and ensures full compliance with the official Blender Extensions platform.
@@ -39,7 +37,7 @@ This update overhauls the user interface, material architecture, and color assig
 
 ---
 
-## Twitter / X Update Post (Compact)
+## Compact Summary
 
 Palette Colorizer 1.1.1 for Blender 5.0+ is out now!
 

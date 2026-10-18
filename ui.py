@@ -272,7 +272,7 @@ class PALETTE_PT_share(Panel):
         settings = context.scene.palette_colorizer
 
         box = layout.box()
-        box.label(text="Share String (Discord / Chat)", icon='COPYDOWN')
+        box.label(text="Share String", icon='COPYDOWN')
         box.operator("palette.copy_string", icon='COPYDOWN', text="Copy Active Palette String")
         row = box.row(align=True)
         row.prop(settings, "paste_buffer", text="")
