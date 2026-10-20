@@ -77,7 +77,7 @@ class PaletteColorizerPreferences(AddonPreferences):
 
     def draw_about_tab(self, box):
         col = box.column(align=True)
-        col.label(text="Palette Colorizer 1.1.1 for Blender 5.0+", icon='COLOR')
+        col.label(text="Palette Colorizer 1.1.2 for Blender 5.0+", icon='COLOR')
         col.label(text="Author: Klra")
         col.label(text="Assign color palettes to viewport objects and showcase shaders.")
         row = col.row(align=True)

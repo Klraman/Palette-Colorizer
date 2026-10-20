@@ -1,4 +1,8 @@
-# Palette Colorizer 1.1.1 Update Notes
+# Palette Colorizer 1.1.2 Update Notes
+
+#### New in 1.1.2
+
+- Removed the `3D View` tag from `blender_manifest.toml` and added a direct link to the GitHub Issues page for support and bug reports.
 
 ### Palette Colorizer 1.1.1: Live Updates, Smart Grouping, Non-Destructive Material Slots, and Blender Extensions Compliance
 
