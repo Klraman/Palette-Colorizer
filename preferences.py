@@ -84,3 +84,6 @@ class PaletteColorizerPreferences(AddonPreferences):
         row.operator("wm.url_open", text="GitHub Repository", icon='URL').url = (
             "https://github.com/Klraman/Palette-Colorizer"
         )
+        row.operator("wm.url_open", text="Report an Issue", icon='HELP').url = (
+            "https://github.com/Klraman/Palette-Colorizer/issues"
+        )

@@ -67,3 +67,8 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 4. Select Get Extensions or Add-ons.
 5. Click the top-right arrow icon and select Install from Disk.
 6. Select the palette_colorizer.zip file and click Install from Disk.
+
+## Support and Issue Reporting
+
+- Source Code and Documentation: https://github.com/Klraman/Palette-Colorizer
+- Report Bugs and Request Features: https://github.com/Klraman/Palette-Colorizer/issues
