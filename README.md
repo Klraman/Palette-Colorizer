@@ -2,6 +2,8 @@
 
 Stop presenting flat gray models. Palette Colorizer gives your work-in-progress models, scene blockouts, and concept assets clean, harmonious colors directly in Blender. It supports Blender 5.0 and newer versions, including Blender 5.2.
 
+![Introduction: From gray to a clear direction](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/03-introduction.png)
+
 ## Why Use Palette Colorizer for Work-in-Progress Assets
 
 Presenting 3D assets in default gray shading hides silhouette detail and visual hierarchy. Palette Colorizer solves this problem:
@@ -9,6 +11,8 @@ Presenting 3D assets in default gray shading hides silhouette detail and visual 
 - Clear Visual Hierarchy: Distinct color palettes separate scene elements, component kits, collections, and assemblies at a glance.
 - Client and Team Presentations: Deliver appealing work-in-progress viewport captures and turntable renders without complex production shaders.
 - Fast Production Handover: Finish your modeling phase and start final shading. One click removes all temporary palette materials and attributes from your objects while keeping existing production shaders safe.
+
+![Why Use Palette Colorizer: Make the work easier to read](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/04-why-use-it.png)
 
 ## How It Functions
 
@@ -32,6 +36,10 @@ Palette Colorizer streamlines how you color scene objects:
    - Mesh Color Attribute: Writes colors to a mesh Color Attribute and renders them through an Attribute shader node.
 7. Live Surface Sliders: Adjust Roughness, Metallic, and Specular values in real time across all showcase materials.
 
+![How It Functions: Choose, Assign, Render, Reset](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/05-how-it-functions.png)
+
+![Assignment Modes: Sequential, Random with Seed, and By Name Hash](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/10-assignment-modes.png)
+
 ## Why Use Palette Colorizer Over Blender Random Color
 
 Blender includes a built-in Random viewport color option. Palette Colorizer provides distinct advantages:
@@ -42,6 +50,8 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 - Pinning and Grouping: Blender random color cannot group by collection, parent hierarchy, or mesh island, and cannot lock colors on specific objects.
 - Repeatable Seeds and Adjacency Control: Palette Colorizer includes an unbiased seed generator (1 through 9999) and spatial adjacency checks so touching parts receive contrasting colors.
 - Image and Theme Integration: Extract a custom palette from any reference image or directly from your active Blender user interface theme.
+
+![Comparison: Blender Random Color vs Palette Colorizer](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/06-versus-random.png)
 
 ## Key Features
 
@@ -59,6 +69,8 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 - Compact JSON string copy and paste for quick palette sharing.
 - Persistent palette library in Add-on Preferences.
 
+![Key Features: 30 Built-In Palettes](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/07-key-features.png)
+
 ## How to Install
 
 1. Download the palette_colorizer.zip file.
@@ -67,6 +79,8 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 4. Select Get Extensions or Add-ons.
 5. Click the top-right arrow icon and select Install from Disk.
 6. Select the palette_colorizer.zip file and click Install from Disk.
+
+![How to Install: Setup Guide](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/08-installation.png)
 
 ## Support and Issue Reporting
 

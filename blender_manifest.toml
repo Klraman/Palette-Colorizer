@@ -35,6 +35,7 @@ paths_exclude_pattern = [
     "*.pyc",
     ".DS_Store",
     "*.md",
+    "docs/",
     "assets/",
     "Astra Assets/",
     "generate_gumroad_assets.py",
