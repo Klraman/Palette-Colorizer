@@ -9,6 +9,7 @@ import random
 import colorsys
 import bpy
 import bmesh
+from bpy.app.handlers import persistent
 from mathutils import Vector
 from bpy.props import IntProperty, BoolProperty, StringProperty
 from bpy.types import Operator
@@ -411,6 +412,9 @@ def apply_palette_to_scene(context, settings, force_material=False):
             switch_viewport_shading(context, "MATERIAL")
         else:
             switch_viewport_shading(context, "OBJECT")
+
+    if context and getattr(context, "scene", None):
+        _snapshot_scene_objects(context.scene)
 
     return applied_count
 
@@ -853,3 +857,239 @@ class PALETTE_OT_open_preferences(Operator):
         except Exception:
             bpy.ops.screen.userpref_show("INVOKE_DEFAULT")
         return {'FINISHED'}
+
+_scene_known_uids = {}
+_scene_last_sig = {}
+_scene_seq_counter = {}
+_is_applying_live = False
+
+def _get_scene_key(scene):
+    return getattr(scene, "session_uid", 0) or scene.name
+
+def _get_scene_signature(scene):
+    objs = scene.objects
+    count = len(objs)
+    if count == 0:
+        return (0, 0, 0)
+    first_uid = getattr(objs[0], "session_uid", 0)
+    last_uid = getattr(objs[count - 1], "session_uid", 0)
+    return (count, first_uid, last_uid)
+
+def _snapshot_scene_objects(scene):
+    """Record current object UIDs, data UIDs, and viewport colors for a scene."""
+    scene_key = _get_scene_key(scene)
+    uid_map = {}
+    for obj in scene.objects:
+        obj_uid = getattr(obj, "session_uid", 0) or hash(obj.name)
+        data_uid = getattr(obj.data, "session_uid", 0) if obj.data else 0
+        uid_map[obj_uid] = (data_uid, tuple(obj.color))
+    _scene_known_uids[scene_key] = uid_map
+    _scene_last_sig[scene_key] = _get_scene_signature(scene)
+    return uid_map
+
+def _rgb_key(rgba):
+    return (round(float(rgba[0]), 3), round(float(rgba[1]), 3), round(float(rgba[2]), 3))
+
+def apply_palette_to_new_objects(scene, settings, new_objects, known_uid_map):
+    """Color newly added or duplicated objects without altering existing objects."""
+    ctx = bpy.context
+    palette = get_active_palette_colors(settings, ctx)
+    if not palette or not new_objects:
+        return
+
+    num_colors = len(palette)
+    do_viewport = settings.output_mode in {"VIEWPORT", "BOTH"}
+    do_material = settings.output_mode in {"MATERIAL", "BOTH"}
+
+    shared_obj_mat = None
+    shared_attr_mat = None
+    if do_material:
+        if settings.material_mode == "SHARED_OBJECT_INFO":
+            shared_obj_mat = get_or_create_shared_object_info_material(settings)
+        elif settings.material_mode == "COLOR_ATTRIBUTE":
+            shared_attr_mat = get_or_create_attribute_material(settings)
+
+    existing_data_colors = {
+        data_uid: color
+        for (data_uid, color) in known_uid_map.values()
+        if data_uid != 0
+    }
+    new_uids = {getattr(o, "session_uid", 0) or hash(o.name) for o in new_objects}
+    existing_objs = [
+        o for o in scene.objects
+        if (getattr(o, "session_uid", 0) or hash(o.name)) not in new_uids
+        and o.type in VALID_OBJECT_TYPES
+    ]
+
+    scene_key = _get_scene_key(scene)
+    seq_idx = _scene_seq_counter.get(scene_key, len(existing_objs))
+    colored_any = False
+
+    for new_obj in new_objects:
+        data_uid = getattr(new_obj.data, "session_uid", 0) if new_obj.data else 0
+
+        if data_uid != 0 and data_uid in existing_data_colors:
+            src_color = existing_data_colors[data_uid]
+            new_obj.color = src_color
+            new_obj["pc_locked"] = True
+            continue
+
+        if "pc_locked" in new_obj:
+            del new_obj["pc_locked"]
+
+        obj_uid = getattr(new_obj, "session_uid", 0) or hash(new_obj.name)
+        rng = random.Random((settings.randomize_seed * 100003) ^ int(obj_uid))
+
+        if settings.grouping_mode == "ISLAND" and new_obj.type == 'MESH':
+            primary_rgba = write_mesh_islands_colors(new_obj, palette, settings, rng)
+            r, g, b, a = primary_rgba
+            if settings.preserve_alpha:
+                a = new_obj.color[3]
+            if do_viewport or settings.material_mode == "SHARED_OBJECT_INFO":
+                new_obj.color = (r, g, b, a)
+            if do_material:
+                mat = get_or_create_attribute_material(settings)
+                assign_material_to_object(new_obj, mat, settings)
+            colored_any = True
+            continue
+
+        idx = None
+        if settings.grouping_mode in {"COLLECTION", "ROOT_PARENT"}:
+            g_key = get_group_key(new_obj, settings.grouping_mode)
+            for sib in existing_objs:
+                if get_group_key(sib, settings.grouping_mode) == g_key:
+                    sib_rgb = _rgb_key(sib.color)
+                    for p_i, p_rgba in enumerate(palette):
+                        if _rgb_key(p_rgba) == sib_rgb:
+                            idx = p_i
+                            break
+                    if idx is None:
+                        r, g, b = sib.color[0], sib.color[1], sib.color[2]
+                        a = new_obj.color[3] if settings.preserve_alpha else sib.color[3]
+                        if do_viewport or (do_material and settings.material_mode == "SHARED_OBJECT_INFO"):
+                            new_obj.color = (r, g, b, a)
+                        idx = 0
+                    break
+
+        if idx is None:
+            prev_rgb = _rgb_key(new_obj.color)
+            if settings.assignment_mode == "SEQUENTIAL":
+                idx = seq_idx % num_colors
+                seq_idx += 1
+                if num_colors > 1 and _rgb_key(palette[idx]) == prev_rgb:
+                    idx = seq_idx % num_colors
+                    seq_idx += 1
+            elif settings.assignment_mode == "RANDOM":
+                excluded_rgb = {prev_rgb}
+                if settings.grouping_mode == "OBJECT" and settings.avoid_adjacent_duplicates and num_colors > 1:
+                    c1, r1 = get_world_bounds_info(new_obj)
+                    for other in existing_objs[:200]:
+                        c2, r2 = get_world_bounds_info(other)
+                        if (c1 - c2).length <= (r1 + r2) * 1.15:
+                            excluded_rgb.add(_rgb_key(other.color))
+                candidates = [c for c in range(num_colors) if _rgb_key(palette[c]) not in excluded_rgb]
+                if not candidates and num_colors > 1:
+                    candidates = [c for c in range(num_colors) if _rgb_key(palette[c]) != prev_rgb]
+                idx = rng.choice(candidates) if candidates else rng.randint(0, num_colors - 1)
+            else:
+                g_key = get_group_key(new_obj, settings.grouping_mode)
+                idx = name_to_color_index(g_key, num_colors)
+                if num_colors > 1 and _rgb_key(palette[idx]) == prev_rgb:
+                    idx = (idx + 1) % num_colors
+
+        r, g, b, a = palette[idx]
+        if settings.preserve_alpha:
+            a = new_obj.color[3]
+
+        if do_viewport or (do_material and settings.material_mode == "SHARED_OBJECT_INFO"):
+            new_obj.color = (r, g, b, a)
+
+        if do_material:
+            if settings.material_mode == "SHARED_OBJECT_INFO":
+                assign_material_to_object(new_obj, shared_obj_mat, settings)
+            elif settings.material_mode == "PER_SWATCH":
+                swatch_mat = get_or_create_swatch_material(idx, (r, g, b, a), settings)
+                assign_material_to_object(new_obj, swatch_mat, settings)
+            elif settings.material_mode == "COLOR_ATTRIBUTE":
+                write_mesh_color_attribute(new_obj, (r, g, b, a))
+                assign_material_to_object(new_obj, shared_attr_mat, settings)
+
+        existing_objs.append(new_obj)
+        colored_any = True
+
+    _scene_seq_counter[scene_key] = seq_idx
+
+    if colored_any and settings.auto_switch_shading and ctx:
+        if settings.output_mode == "MATERIAL":
+            switch_viewport_shading(ctx, "MATERIAL")
+        else:
+            switch_viewport_shading(ctx, "OBJECT")
+
+@persistent
+def on_load_post(dummy):
+    """Snapshot all scenes when a blend file is loaded."""
+    _scene_known_uids.clear()
+    _scene_last_sig.clear()
+    _scene_seq_counter.clear()
+    for scene in bpy.data.scenes:
+        _snapshot_scene_objects(scene)
+
+@persistent
+def on_depsgraph_update_post(scene, depsgraph):
+    """Detect newly inserted or duplicated objects and apply palette colors when Live Update is enabled."""
+    global _is_applying_live
+    if _is_applying_live or scene is None:
+        return
+
+    scene_key = _get_scene_key(scene)
+    if scene_key not in _scene_known_uids:
+        _snapshot_scene_objects(scene)
+        return
+
+    sig = _get_scene_signature(scene)
+    if sig == _scene_last_sig.get(scene_key):
+        return
+
+    known_uid_map = _scene_known_uids[scene_key]
+    settings = getattr(scene, "palette_colorizer", None)
+    if not settings or not settings.auto_apply:
+        _snapshot_scene_objects(scene)
+        return
+
+    allowed_types = VALID_OBJECT_TYPES if settings.include_non_mesh else {'MESH'}
+    new_objs = []
+    for obj in scene.objects:
+        obj_uid = getattr(obj, "session_uid", 0) or hash(obj.name)
+        if obj_uid not in known_uid_map and obj.type in allowed_types:
+            new_objs.append(obj)
+
+    if new_objs:
+        _is_applying_live = True
+        try:
+            apply_palette_to_new_objects(scene, settings, new_objs, known_uid_map)
+        finally:
+            _is_applying_live = False
+
+    _snapshot_scene_objects(scene)
+
+def register_handlers():
+    """Register load_post and depsgraph_update_post scene handlers."""
+    if on_load_post not in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.append(on_load_post)
+    if on_depsgraph_update_post not in bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.append(on_depsgraph_update_post)
+    try:
+        for scene in bpy.data.scenes:
+            _snapshot_scene_objects(scene)
+    except Exception:
+        pass
+
+def unregister_handlers():
+    """Remove load_post and depsgraph_update_post scene handlers."""
+    if on_depsgraph_update_post in bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.remove(on_depsgraph_update_post)
+    if on_load_post in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.remove(on_load_post)
+    _scene_known_uids.clear()
+    _scene_last_sig.clear()
+    _scene_seq_counter.clear()

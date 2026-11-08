@@ -18,7 +18,7 @@ Presenting 3D assets in default gray shading hides silhouette detail and visual 
 
 Palette Colorizer streamlines how you color scene objects:
 
-1. Live Viewport Updates: Select any palette, distribution mode, or seed and watch your scene update immediately in the 3D Viewport.
+1. Live Viewport Updates: Select any palette, distribution mode, or seed and watch your scene update immediately in the 3D Viewport. Newly added objects (`Shift + A`) and duplicated objects (`Shift + D`) automatically receive a new palette color in real time, while linked duplicates (`Alt + D`) stay pinned with the original object's color.
 2. Interactive Swatch Preview: Preview all palette colors directly in the sidebar panel and copy any palette into the Custom editor with one click.
 3. Flexible Grouping Modes:
    - Per Object: Assigns a swatch color to each object.

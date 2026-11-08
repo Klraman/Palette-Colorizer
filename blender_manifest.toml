@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "palette_colorizer"
-version = "1.1.2"
+version = "1.2.0"
 name = "Palette Colorizer"
 tagline = "Assign color palettes to viewport objects and showcase shaders"
 maintainer = "Klra"

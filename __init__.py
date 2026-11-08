@@ -19,6 +19,11 @@ def reload_modules():
     import bpy
     from . import palettes, operators, properties, preferences, ui
 
+    try:
+        operators.unregister_handlers()
+    except Exception:
+        pass
+
     if hasattr(bpy.types.Scene, "palette_colorizer"):
         try:
             del bpy.types.Scene.palette_colorizer
@@ -116,8 +121,10 @@ def register():
     bpy.types.Scene.palette_colorizer = bpy.props.PointerProperty(
         type=properties.PaletteColorizerSettings
     )
+    operators.register_handlers()
 
 def unregister():
+    operators.unregister_handlers()
     if hasattr(bpy.types.Scene, "palette_colorizer"):
         del bpy.types.Scene.palette_colorizer
 

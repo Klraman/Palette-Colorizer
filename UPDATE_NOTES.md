@@ -1,12 +1,17 @@
-# Palette Colorizer 1.1.2 Update Notes
+# Palette Colorizer 1.2.0 Update Notes
+
+## Detailed Release Notes
+
+### Palette Colorizer 1.2.0: Live Object Insertion and Duplication Coloring
+
+#### New in 1.2.0
+
+- Live Update on New Object Insertion: When Live Update is enabled, adding new objects (`Shift + A`), pasting objects (`Ctrl + V`), or duplicating objects (`Shift + D`) automatically assigns a color (and showcase material, if active) from the current palette without reshuffling existing scene objects.
+- Smart `Shift + D` vs `Alt + D` Duplicate Handling: Full duplicates (`Shift + D`) automatically unpin and receive a distinct swatch color from the active palette, whereas linked duplicates (`Alt + D`) keep the source object's color and remain pinned.
 
 #### New in 1.1.2
 
 - Removed the `3D View` tag from `blender_manifest.toml` and added a direct link to the GitHub Issues page for support and bug reports.
-
-### Palette Colorizer 1.1.1: Live Updates, Smart Grouping, Non-Destructive Material Slots, and Blender Extensions Compliance
-
-This update overhauls the user interface, material architecture, and color assignment engine for Blender 5.0 and 5.2, and ensures full compliance with the official Blender Extensions platform.
 
 #### New in 1.1.1 (Blender Extensions Compliance)
 
@@ -43,11 +48,11 @@ This update overhauls the user interface, material architecture, and color assig
 
 ## Compact Summary
 
-Palette Colorizer 1.1.1 for Blender 5.0+ is out now!
+Palette Colorizer 1.2.0 for Blender 5.0+ is out now!
 
 What is new:
-- Full Blender Extensions platform compliance
-- Live viewport updates as you scrub palettes & seeds
+- Live auto-coloring when adding (`Shift + A`) or duplicating (`Shift + D`) objects
+- Linked duplicates (`Alt + D`) automatically keep the original object's color and stay pinned
 - Non-destructive material slots (keeps & restores your original materials)
 - Group by Object, Collection, Parent, or Mesh Island
 - Pin/lock object colors & Adjacent Contrast check

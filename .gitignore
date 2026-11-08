@@ -13,6 +13,8 @@ assets/frames/
 assets/palettes_temp.json
 Astra Assets/
 
-# Build packages (distribute via releases or Gumroad)
+# Build packages and local agent workspace config
 *.zip
+AGENTS.md
+.agents/
 

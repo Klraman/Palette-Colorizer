@@ -93,7 +93,7 @@ class PaletteColorizerSettings(PropertyGroup):
     )
     auto_apply: BoolProperty(
         name="Live Update",
-        description="Automatically update object colors when you change palette, seed, or mode",
+        description="Automatically update object colors when you change settings or add and duplicate objects",
         default=True,
     )
     custom_colors: CollectionProperty(type=PaletteColorItem)
