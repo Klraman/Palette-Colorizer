@@ -1,6 +1,6 @@
 # Palette Colorizer for Blender
 
-Stop presenting flat gray models. Palette Colorizer gives your work-in-progress models, scene blockouts, and concept assets clean, harmonious colors directly in Blender. It supports Blender 5.0 and newer versions, including Blender 5.2.
+Stop presenting flat gray models. Palette Colorizer gives your work-in-progress models, scene blockouts, and concept assets clean, harmonious colors directly in Blender. It supports Blender 5.0 and newer versions, including Blender 5.3.
 
 ![Introduction: From gray to a clear direction](https://raw.githubusercontent.com/Klraman/Palette-Colorizer/master/docs/03-introduction.png)
 
@@ -74,7 +74,7 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 ## How to Install
 
 1. Download the palette_colorizer.zip file.
-2. Open Blender 5.0 or newer (including Blender 5.2).
+2. Open Blender 5.0 or newer (including Blender 5.3).
 3. Open Edit and select Preferences.
 4. Select Get Extensions or Add-ons.
 5. Click the top-right arrow icon and select Install from Disk.

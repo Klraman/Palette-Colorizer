@@ -463,6 +463,8 @@ class PALETTE_OT_reset_colors(Operator):
                 continue
             obj.color = (1.0, 1.0, 1.0, 1.0)
             count += 1
+        if context and getattr(context, "scene", None):
+            _snapshot_scene_objects(context.scene)
         self.report({'INFO'}, f"Reset {count} object(s) to white.")
         return {'FINISHED'}
 
@@ -545,6 +547,8 @@ class PALETTE_OT_lock_selected(Operator):
             return {'CANCELLED'}
         for obj in objs:
             obj["pc_locked"] = True
+        if context and getattr(context, "scene", None):
+            _snapshot_scene_objects(context.scene)
         self.report({'INFO'}, f"Locked color on {len(objs)} object(s).")
         return {'FINISHED'}
 
@@ -920,6 +924,10 @@ def apply_palette_to_new_objects(scene, settings, new_objects, known_uid_map):
         if (getattr(o, "session_uid", 0) or hash(o.name)) not in new_uids
         and o.type in VALID_OBJECT_TYPES
     ]
+    for existing_obj in existing_objs:
+        d_uid = getattr(existing_obj.data, "session_uid", 0) if existing_obj.data else 0
+        if d_uid != 0:
+            existing_data_colors[d_uid] = tuple(existing_obj.color)
 
     scene_key = _get_scene_key(scene)
     seq_idx = _scene_seq_counter.get(scene_key, len(existing_objs))
@@ -932,6 +940,7 @@ def apply_palette_to_new_objects(scene, settings, new_objects, known_uid_map):
             src_color = existing_data_colors[data_uid]
             new_obj.color = src_color
             new_obj["pc_locked"] = True
+            existing_objs.append(new_obj)
             continue
 
         if "pc_locked" in new_obj:
@@ -950,6 +959,9 @@ def apply_palette_to_new_objects(scene, settings, new_objects, known_uid_map):
             if do_material:
                 mat = get_or_create_attribute_material(settings)
                 assign_material_to_object(new_obj, mat, settings)
+            if data_uid != 0:
+                existing_data_colors[data_uid] = tuple(new_obj.color)
+            existing_objs.append(new_obj)
             colored_any = True
             continue
 
@@ -1014,6 +1026,8 @@ def apply_palette_to_new_objects(scene, settings, new_objects, known_uid_map):
                 write_mesh_color_attribute(new_obj, (r, g, b, a))
                 assign_material_to_object(new_obj, shared_attr_mat, settings)
 
+        if data_uid != 0:
+            existing_data_colors[data_uid] = (r, g, b, a)
         existing_objs.append(new_obj)
         colored_any = True
 

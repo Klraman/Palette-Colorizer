@@ -1,8 +1,13 @@
-# Palette Colorizer 1.2.0 Update Notes
+# Palette Colorizer 1.2.1 Update Notes
 
 ## Detailed Release Notes
 
-### Palette Colorizer 1.2.0: Live Object Insertion and Duplication Coloring
+### Palette Colorizer 1.2.1: Blender 5.3 Support and Live Duplication Refinements
+
+#### New in 1.2.1
+
+- Blender 5.3 Compatibility: Audited and verified full compatibility with Blender 5.3 (Python API, PropertyGroup read-only default name rules, UI theme properties, Principled BSDF nodes, and 3D Viewport Sidebar search).
+- Live Linked-Duplicate (`Alt + D`) Color Sync: Improved live object tracking so linked duplicates (`Alt + D`) and multi-object paste/duplicate batches always inherit the source object's latest viewport color, even if the source color was modified manually or reset prior to duplication.
 
 #### New in 1.2.0
 
@@ -48,9 +53,11 @@
 
 ## Compact Summary
 
-Palette Colorizer 1.2.0 for Blender 5.0+ is out now!
+Palette Colorizer 1.2.1 for Blender 5.0+ (including Blender 5.3) is out now!
 
 What is new:
+- Full Blender 5.3 support and compatibility
+- Improved live linked-duplicate (`Alt + D`) color sync after manual color edits or resets
 - Live auto-coloring when adding (`Shift + A`) or duplicating (`Shift + D`) objects
 - Linked duplicates (`Alt + D`) automatically keep the original object's color and stay pinned
 - Non-destructive material slots (keeps & restores your original materials)
