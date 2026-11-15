@@ -57,7 +57,7 @@ Blender includes a built-in Random viewport color option. Palette Colorizer prov
 
 - 30 categorized built-in color palettes.
 - Dynamic palette extraction from your active Blender theme.
-- Dominant color palette sampler from any loaded reference image.
+- Dominant color palette sampler from any image file on disk (`Browse Image...`) or loaded reference image.
 - Interactive swatch preview bar in the sidebar panel.
 - Live Update mode for instant feedback when changing palettes or seeds.
 - Grouping by Object, Collection, Root Parent hierarchy, or Mesh Island.

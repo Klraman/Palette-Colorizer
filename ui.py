@@ -158,9 +158,11 @@ class PALETTE_PT_main(Panel):
             bcol.separator()
             bcol.operator("palette.randomize_custom", icon='COLOR', text="")
 
-            img_row = cbox.row(align=True)
+            img_col = cbox.column(align=True)
+            img_row = img_col.row(align=True)
             img_row.prop(settings, "source_image", text="")
             img_row.operator("palette.sample_image_colors", text="Sample Image", icon='IMAGE_DATA')
+            img_col.operator("palette.browse_image_colors", text="Browse Image...", icon='FILE_IMAGE')
 
         layout.separator(factor=0.5)
 

@@ -2,10 +2,11 @@
 
 ## Detailed Release Notes
 
-### Palette Colorizer 1.2.1: Blender 5.3 Support and Live Duplication Refinements
+### Palette Colorizer 1.2.1: Direct Image File Browser Sampling & Blender 5.3 Support
 
 #### New in 1.2.1
 
+- Direct File Explorer Image Sampling (`Browse Image...`): Added a **Browse Image...** button inside the Custom Palette editor so you can pick any image file directly from your file explorer (`.png`, `.jpg`, `.webp`, `.exr`, etc.) and extract 8 dominant colors in one step, without having to add the image as a reference or texture first. The existing Blender Image selector remains available right above it for sampling already-loaded images.
 - Blender 5.3 Compatibility: Audited and verified full compatibility with Blender 5.3 (Python API, PropertyGroup read-only default name rules, UI theme properties, Principled BSDF nodes, and 3D Viewport Sidebar search).
 - Live Linked-Duplicate (`Alt + D`) Color Sync: Improved live object tracking so linked duplicates (`Alt + D`) and multi-object paste/duplicate batches always inherit the source object's latest viewport color, even if the source color was modified manually or reset prior to duplication.
 
@@ -56,6 +57,7 @@
 Palette Colorizer 1.2.1 for Blender 5.0+ (including Blender 5.3) is out now!
 
 What is new:
+- Browse Image... button to sample palettes directly from any image file on disk
 - Full Blender 5.3 support and compatibility
 - Improved live linked-duplicate (`Alt + D`) color sync after manual color edits or resets
 - Live auto-coloring when adding (`Shift + A`) or duplicating (`Shift + D`) objects

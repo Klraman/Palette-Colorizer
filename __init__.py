@@ -69,6 +69,7 @@ classes = (
     operators.PALETTE_OT_step_seed,
     operators.PALETTE_OT_copy_to_custom,
     operators.PALETTE_OT_sample_image_colors,
+    operators.PALETTE_OT_browse_image_colors,
     operators.PALETTE_OT_add_custom_color,
     operators.PALETTE_OT_remove_custom_color,
     operators.PALETTE_OT_randomize_custom,

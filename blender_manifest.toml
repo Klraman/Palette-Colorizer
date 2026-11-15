@@ -24,7 +24,7 @@ tags = ["Material"]
 # Each value is a short description up to 64 characters without trailing punctuation.
 [permissions]
 clipboard = "Copy and paste palette share strings between users"
-files = "Export and import palette JSON files to and from disk"
+files = "Export and import palette JSON files and sample image files"
 
 # Build: Exclude files that must not ship in the final zip archive.
 [build]

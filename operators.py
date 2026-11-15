@@ -4,6 +4,7 @@
 Operators and scene execution logic for Palette Colorizer.
 """
 
+import os
 import json
 import random
 import colorsys
@@ -627,7 +628,7 @@ class PALETTE_OT_sample_image_colors(Operator):
         settings = context.scene.palette_colorizer
         img = settings.source_image
         if not img:
-            self.report({'WARNING'}, "Select a Source Image first.")
+            self.report({'WARNING'}, "Select a Source Image or click Browse Image first.")
             return {'CANCELLED'}
         colors = extract_colors_from_image(img, count=8)
         if not colors:
@@ -636,7 +637,44 @@ class PALETTE_OT_sample_image_colors(Operator):
         load_colors_into_custom(settings, colors)
         settings.custom_palette_name = img.name.rsplit(".", 1)[0]
         settings.palette_name = "CUSTOM"
+        if settings.auto_apply:
+            apply_palette_to_scene(context, settings)
         self.report({'INFO'}, f"Extracted {len(colors)} colors from '{img.name}'.")
+        return {'FINISHED'}
+
+class PALETTE_OT_browse_image_colors(Operator, ImportHelper):
+    bl_idname = "palette.browse_image_colors"
+    bl_label = "Browse Image..."
+    bl_description = "Select an image file from disk and sample 8 dominant colors into the Custom Palette"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    filter_glob: StringProperty(
+        default="*.png;*.jpg;*.jpeg;*.webp;*.bmp;*.tga;*.tif;*.tiff;*.exr;*.hdr",
+        options={'HIDDEN'},
+    )
+
+    def execute(self, context):
+        settings = context.scene.palette_colorizer
+        if not self.filepath or not os.path.isfile(self.filepath):
+            self.report({'WARNING'}, "Select a valid image file.")
+            return {'CANCELLED'}
+        try:
+            img = bpy.data.images.load(self.filepath, check_existing=True)
+        except RuntimeError as e:
+            self.report({'ERROR'}, f"Failed to load image: {e}")
+            return {'CANCELLED'}
+        colors = extract_colors_from_image(img, count=8)
+        if not colors:
+            self.report({'WARNING'}, "Could not read pixel data from the selected image.")
+            return {'CANCELLED'}
+        settings.source_image = img
+        load_colors_into_custom(settings, colors)
+        stem = os.path.splitext(os.path.basename(self.filepath))[0]
+        settings.custom_palette_name = stem or img.name.rsplit(".", 1)[0]
+        settings.palette_name = "CUSTOM"
+        if settings.auto_apply:
+            apply_palette_to_scene(context, settings)
+        self.report({'INFO'}, f"Extracted {len(colors)} colors from '{os.path.basename(self.filepath)}'.")
         return {'FINISHED'}
 
 class PALETTE_OT_add_custom_color(Operator):
